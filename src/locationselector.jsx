@@ -14,33 +14,51 @@ const LocationSelector = () => {
     fetch("https://crio-location-selector.onrender.com/countries")
       .then((res) => res.json())
       .then((data) => setCountries(data))
-      .catch((err) => console.error("Error fetching countries:", err));
+      .catch((err) => {
+        console.error("Error fetching countries:", err);
+        setCountries([]); 
+      });
   }, []);
 
-
+  
   useEffect(() => {
     if (selectedCountry) {
       fetch(`https://crio-location-selector.onrender.com/country=${selectedCountry}/states`)
         .then((res) => res.json())
         .then((data) => setStates(data))
-        .catch((err) => console.error("Error fetching states:", err));
+        .catch((err) => {
+          console.error("Error fetching states:", err);
+          setStates([]);
+        });
+    } else {
+      setStates([]); 
+      setCities([]); 
     }
   }, [selectedCountry]);
 
   
   useEffect(() => {
-    if (selectedCountry && selectedState) {
+    if (selectedState) {
       fetch(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`)
         .then((res) => res.json())
         .then((data) => setCities(data))
-        .catch((err) => console.error("Error fetching cities:", err));
+        .catch((err) => {
+          console.error("Error fetching cities:", err);
+          setCities([]);
+        });
+    } else {
+      setCities([]); 
     }
   }, [selectedState]);
 
   return (
     <div>
-    
-      <select onChange={(e) => setSelectedCountry(e.target.value)}>
+      
+      <select onChange={(e) => {
+        setSelectedCountry(e.target.value);
+        setSelectedState(""); 
+        setSelectedCity(""); 
+      }}>
         <option value="">Select Country</option>
         {countries.map((country, index) => (
           <option key={index} value={country}>
@@ -50,7 +68,10 @@ const LocationSelector = () => {
       </select>
 
       
-      <select onChange={(e) => setSelectedState(e.target.value)} disabled={!selectedCountry}>
+      <select onChange={(e) => {
+        setSelectedState(e.target.value);
+        setSelectedCity(""); 
+      }} disabled={!selectedCountry}>
         <option value="">Select State</option>
         {states.map((state, index) => (
           <option key={index} value={state}>
