@@ -11,7 +11,7 @@ const LocationSelector = () => {
 
   
   useEffect(() => {
-    fetch("https://crio-location-selector.onrender.com/countries")
+    fetch(" https://crio-location-selector.onrender.com/countries")
       .then((res) => res.json())
       .then((data) => setCountries(data))
       .catch((err) => {
